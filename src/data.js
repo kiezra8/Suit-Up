@@ -28,20 +28,20 @@ export const products = [
 ];
 
 export const banners = [
-    { id: 1, title: "Exquisite Summer Collection", text: "Premium fabrics designed for the modern woman. Up to 50% OFF.", image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1200" },
-    { id: 2, title: "Executive Business Tailoring", text: "Command respect in every room with our bespoke office collection.", image: "https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=1200" },
-    { id: 3, title: "Luxury Timepieces & Gems", text: "The final touch of elegance for those who settle for nothing less.", image: "https://images.unsplash.com/photo-1509192505295-827dd666504a?w=1200" }
+    { id: 1, title: "Exquisite Summer Collection", text: "Premium fabrics designed for the modern woman. Up to 50% OFF.", image: "https://i.pinimg.com/736x/65/eb/cc/65ebcc306ed373f0679f0e2f4faf7516.jpg" },
+    { id: 2, title: "Executive Business Tailoring", text: "Command respect in every room with our bespoke office collection.", image: "https://i.pinimg.com/1200x/76/9c/d6/769cd6b9eb68e0ee2b0b52370586cc13.jpg" },
+    { id: 3, title: "Luxury Timepieces & Gems", text: "The final touch of elegance for those who settle for nothing less.", image: "https://i.pinimg.com/736x/2e/ac/37/2eac37a5dd76698d8f96a2d52292f12c.jpg" }
 ];
 
 export const categories = [
-    { id: 'dresses', name: 'Dresses', image: 'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=200' },
-    { id: 'office', name: 'Office', image: 'https://images.unsplash.com/photo-1548142813-c348350df52b?w=200' },
-    { id: 'suits', name: 'Suits', image: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=200' },
-    { id: 'casual', name: 'Casual', image: 'https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?w=200' },
-    { id: 'traditional', name: 'Ethnic', image: 'https://images.unsplash.com/photo-1583391733950-2906d205fe6d?w=200' },
-    { id: 'sportswear', name: 'Sports', image: 'https://images.unsplash.com/photo-1518622358385-8ea7d0794b5c?w=200' },
-    { id: 'nightwear', name: 'Night', image: 'https://images.unsplash.com/photo-1563178406-4cdc2923acce?w=200' },
-    { id: 'watches', name: 'Watches', image: 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=200' },
-    { id: 'shoes', name: 'Shoes', image: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=200' },
-    { id: 'accessories', name: 'Style', image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=200' }
+    { id: 'dresses', name: 'Dresses', image: 'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=400' },
+    { id: 'office', name: 'Office', image: 'https://images.unsplash.com/photo-1548142813-c348350df52b?w=400' },
+    { id: 'suits', name: 'Suits', image: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400' },
+    { id: 'casual', name: 'Casual', image: 'https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?w=400' },
+    { id: 'traditional', name: 'Ethnic', image: 'https://i.pinimg.com/1200x/19/4f/11/194f116e9b2704aa7ec6bcf8e30abe31.jpg' },
+    { id: 'sportswear', name: 'Sports', image: 'https://i.pinimg.com/1200x/41/7b/62/417b62bae6ae9c9a6b098969fffd3f44.jpg' },
+    { id: 'nightwear', name: 'Night', image: 'https://i.pinimg.com/736x/3a/5c/b9/3a5cb95d4938408d688c72e0cefc1d1c.jpg' },
+    { id: 'watches', name: 'Watches', image: 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=400' },
+    { id: 'shoes', name: 'Shoes', image: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=400' },
+    { id: 'accessories', name: 'Style', image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400' }
 ];
