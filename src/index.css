@@ -132,22 +132,29 @@ html { scroll-behavior: smooth; }
     cursor: pointer;
     overflow: hidden;
     height: 100%;
-    background: #1a1a1a;
+    background: #111;
+    opacity: 0.4;
+    transition: opacity 0.6s ease;
+}
+
+.banner.active {
+    opacity: 1;
 }
 
 .banner img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transform: scale(1.1); /* Start slightly zoomed for the zoom-out effect */
 }
 
 .banner.active img {
-    animation: kenBurns 10s linear infinite alternate;
+    animation: sheinZoomOut 8s ease-out forwards;
 }
 
-@keyframes kenBurns {
-    0% { transform: scale(1) translate(0, 0); }
-    100% { transform: scale(1.15) translate(-1%, -1%); }
+@keyframes sheinZoomOut {
+    from { transform: scale(1.1); }
+    to { transform: scale(1.0); }
 }
 
 .banner-overlay {
@@ -229,7 +236,7 @@ html { scroll-behavior: smooth; }
 
 .banner-dot.active {
     background: #ff6b6b;
-    width: 24px;
+    width: 20px;
     border-radius: 4px;
 }
 
