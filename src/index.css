@@ -132,6 +132,7 @@ html { scroll-behavior: smooth; }
     cursor: pointer;
     overflow: hidden;
     height: 100%;
+    background: #1a1a1a;
 }
 
 .banner img {
@@ -818,7 +819,7 @@ html { scroll-behavior: smooth; }
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(255,255,255,0.95);
+    background: rgba(255,255,255,0.7);
     backdrop-filter: blur(10px);
     display: flex;
     align-items: center;
