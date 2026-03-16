@@ -280,13 +280,12 @@ html { scroll-behavior: smooth; }
 .see-all:hover { transform: translateX(5px); }
 
 .categories-grid {
-    display: flex;
-    overflow-x: auto;
-    gap: 15px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(2, auto);
+    gap: 15px 10px;
     padding: 10px 0;
-    scrollbar-width: none;
 }
-.categories-grid::-webkit-scrollbar { display: none; }
 
 .category-item {
     display: flex;
@@ -295,14 +294,14 @@ html { scroll-behavior: smooth; }
     cursor: pointer;
     transition: all 0.3s ease;
     position: relative;
-    min-width: 70px;
+    width: 100%;
 }
 .category-item:hover { transform: translateY(-8px) scale(1.05); }
 .category-item:active { transform: scale(0.95); }
 
 .category-icon {
-    width: 70px;
-    height: 70px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     overflow: hidden;
     margin-bottom: 8px;

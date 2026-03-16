@@ -354,7 +354,11 @@ const App = () => {
                 </div>
             </footer>
 
-            <div className={`cart-counter-bubble ${cartBounce ? 'bounce' : ''}`} onClick={() => setIsCartOpen(true)}>{cart.length}</div>
+            {cart.length > 0 && (
+                <div className={`cart-counter-bubble ${cartBounce ? 'bounce' : ''}`} onClick={() => setIsCartOpen(true)}>
+                    {cart.length}
+                </div>
+            )}
 
             {isCartOpen && (
                 <div className="cart-modal-overlay" onClick={() => setIsCartOpen(false)}>
