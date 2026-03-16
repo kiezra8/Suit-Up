@@ -207,7 +207,7 @@ const App = () => {
                                 </span>
                             </div>
                             <div className="categories-grid">
-                                {categories.slice(0, 7).map(cat => (
+                                {categories.map(cat => (
                                     <div key={cat.id} className="category-item" onClick={() => handleCategoryClick(cat.id)}>
                                         <div className="category-icon">
                                             <img src={cat.image} alt={cat.name} />
