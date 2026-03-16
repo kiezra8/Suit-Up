@@ -180,8 +180,8 @@ const App = () => {
             <main style={{ minHeight: '100vh', padding: '10px 15px' }}>
                 {activeNav === 'home' && (
                     <>
-                        <section className="banners-container" style={{ margin: '0 -15px 10px' }}>
-                            <div className="banner-slider" style={{ transform: `translateX(-${currentBanner * 100}%)` }}>
+                        <section className="banners-container">
+                            <div className="banner-slider">
                                 {banners.map((banner, index) => (
                                     <div key={banner.id} className={`banner ${currentBanner === index ? 'active' : ''}`}>
                                         <img src={banner.image} alt={banner.title} />
@@ -199,7 +199,7 @@ const App = () => {
                             </div>
                         </section>
 
-                        <section className="categories-section" style={{ margin: '0 -15px 10px', borderRadius: '0' }}>
+                        <section className="categories-section">
                             <div className="section-header">
                                 <h2 className="section-title">Categories</h2>
                                 <span className="see-all" onClick={() => setActiveNav('categories')}>
