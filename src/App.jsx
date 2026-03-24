@@ -352,35 +352,57 @@ const App = () => {
                         </div>
                         {!user ? (
                             <div style={{ background: '#fff', padding: '25px', borderRadius: '20px', boxShadow: '0 8px 30px rgba(0,0,0,0.05)' }}>
-                                <h3 style={{ marginBottom: '20px', fontSize: '18px', fontWeight: 'bold' }}>Login to Your Account</h3>
+                                <h3 style={{ marginBottom: '20px', fontSize: '18px', fontWeight: 'bold' }}>Welcome Back</h3>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
                                     <input type="email" placeholder="Email" value={loginEmail} onChange={e => setLoginEmail(e.target.value)} style={{ padding: '12px', borderRadius: '8px', border: '1px solid #ddd' }} />
                                     <input type="password" placeholder="Password" value={loginPassword} onChange={e => setLoginPassword(e.target.value)} style={{ padding: '12px', borderRadius: '8px', border: '1px solid #ddd' }} />
-                                    <button 
-                                        onClick={async () => {
-                                            if (!loginEmail || !loginPassword) {
-                                                showToast('Please fill in both email and password');
-                                                return;
-                                            }
-                                            setIsLoginLoading(true);
-                                            const { error } = await supabase.auth.signInWithPassword({ email: loginEmail, password: loginPassword });
-                                            if (error) {
-                                                // Handle potential missing user implicitly by signing up if login fails
-                                                const { error: signUpError } = await supabase.auth.signUp({ email: loginEmail, password: loginPassword });
-                                                if (signUpError) {
-                                                    showToast(signUpError.message);
-                                                } else {
-                                                    showToast('Signup successful! Please log in directly now.');
+                                    
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                                        <button 
+                                            onClick={async () => {
+                                                if (!loginEmail || !loginPassword) {
+                                                    showToast('Enter email and password');
+                                                    return;
                                                 }
-                                            } else {
-                                                showToast('Logged in successfully!');
-                                            }
-                                            setIsLoginLoading(false);
-                                        }}
-                                        style={{ padding: '12px', background: '#ff6b6b', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}
-                                    >
-                                        {isLoginLoading ? 'Processing...' : 'Login / Sign Up'}
-                                    </button>
+                                                setIsLoginLoading(true);
+                                                const { error } = await supabase.auth.signInWithPassword({ email: loginEmail, password: loginPassword });
+                                                if (error) {
+                                                    showToast(`Login error: ${error.message}`);
+                                                } else {
+                                                    showToast('Logged in successfully!');
+                                                }
+                                                setIsLoginLoading(false);
+                                            }}
+                                            style={{ padding: '12px', background: '#ff6b6b', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}
+                                        >
+                                            {isLoginLoading ? '...' : 'Login'}
+                                        </button>
+
+                                        <button 
+                                            onClick={async () => {
+                                                if (!loginEmail || !loginPassword) {
+                                                    showToast('Enter email and password');
+                                                    return;
+                                                }
+                                                setIsLoginLoading(true);
+                                                const { error } = await supabase.auth.signUp({ 
+                                                    email: loginEmail, 
+                                                    password: loginPassword,
+                                                    options: { emailRedirectTo: window.location.origin }
+                                                });
+                                                if (error) {
+                                                    showToast(`Signup error: ${error.message}`);
+                                                } else {
+                                                    showToast('Success! Check your email to confirm or log in.');
+                                                }
+                                                setIsLoginLoading(false);
+                                            }}
+                                            style={{ padding: '12px', background: '#333', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}
+                                        >
+                                            Sign Up
+                                        </button>
+                                    </div>
+                                    <p style={{ fontSize: '12px', color: '#888', textAlign: 'center' }}>Creating an account lets you wishlist items and access the dashboard.</p>
                                 </div>
                             </div>
                         ) : (
