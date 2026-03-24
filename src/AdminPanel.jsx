@@ -153,7 +153,6 @@ const AdminPanel = ({ onBack }) => {
                                 <input 
                                     type="file" 
                                     accept="image/*" 
-                                    capture="environment" // Hint for camera on mobile
                                     style={{ padding: '12px', border: '1px solid #ddd', borderRadius: '8px', background: '#fff' }} 
                                     onChange={e => {
                                         const file = e.target.files[0];
@@ -173,7 +172,6 @@ const AdminPanel = ({ onBack }) => {
                                 <input 
                                     type="file" 
                                     accept="image/*" 
-                                    capture="environment"
                                     style={{ padding: '12px', border: '1px solid #ddd', borderRadius: '8px', background: '#fff' }} 
                                     onChange={e => {
                                         const file = e.target.files[0];
@@ -230,7 +228,6 @@ const AdminPanel = ({ onBack }) => {
                                 <input 
                                     type="file" 
                                     accept="image/*" 
-                                    capture="environment"
                                     style={{ padding: '12px', border: '1px solid #ddd', borderRadius: '8px', background: '#fff' }} 
                                     onChange={e => {
                                         const file = e.target.files[0];
