@@ -25,6 +25,7 @@ const App = () => {
     const [headerScrolled, setHeaderScrolled] = useState(false);
     const [cartBounce, setCartBounce] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [isChatModalOpen, setIsChatModalOpen] = useState(false);
 
     // Filtered products
     const filteredProducts = products.filter(p => {
@@ -67,7 +68,7 @@ const App = () => {
         if (banners.length === 0) return;
         const interval = setInterval(() => {
             setCurrentBanner(prev => (prev + 1) % banners.length);
-        }, 5000);
+        }, 4000);
         return () => clearInterval(interval);
     }, [banners]);
 
@@ -208,8 +209,14 @@ const App = () => {
                             }}
                         />
                     </div>
-                    <div className="header-icons" onClick={() => setActiveNav('account')}>
-                        <i className="far fa-user"></i>
+                    <div className="header-icons">
+                        <div className={`wishlist-header-icon ${activeNav === 'wishlist' ? 'active' : ''}`} onClick={() => setActiveNav('wishlist')}>
+                            <i className="far fa-heart"></i>
+                            {wishlist.size > 0 && <span className="wishlist-badge">{wishlist.size}</span>}
+                        </div>
+                        <div className="account-header-icon" onClick={() => setActiveNav('account')}>
+                            <i className="far fa-user"></i>
+                        </div>
                     </div>
                 </div>
             </header>
@@ -454,9 +461,9 @@ const App = () => {
                     <i className="fas fa-shopping-bag"></i>
                     <span>Cart</span>
                 </div>
-                <div className={`nav-item ${activeNav === 'wishlist' ? 'active' : ''}`} onClick={() => setActiveNav('wishlist')}>
-                    <i className="fas fa-heart"></i>
-                    <span>Wishlist</span>
+                <div className={`nav-item ${isChatModalOpen ? 'active' : ''}`} onClick={() => setIsChatModalOpen(true)}>
+                    <i className="fas fa-comment-dots"></i>
+                    <span>Chat</span>
                 </div>
                 <div className={`nav-item ${activeNav === 'account' ? 'active' : ''}`} onClick={() => setActiveNav('account')}>
                     <i className="fas fa-user"></i>
@@ -533,6 +540,28 @@ const App = () => {
                     </div>
                 </div>
             )}
+            {isChatModalOpen && (
+                <div className="chat-modal-overlay" onClick={() => setIsChatModalOpen(false)}>
+                    <div className="chat-modal-content" onClick={(e) => e.stopPropagation()}>
+                        <div className="chat-modal-header">
+                            <h3>Connect with Us</h3>
+                            <div className="chat-close" onClick={() => setIsChatModalOpen(false)}><i className="fas fa-times"></i></div>
+                        </div>
+                        <p>How would you like to reach us?</p>
+                        <div className="chat-options">
+                            <a href="https://wa.me/256702370441" target="_blank" rel="noopener noreferrer" className="chat-option whatsapp">
+                                <i className="fab fa-whatsapp"></i>
+                                <span>WhatsApp</span>
+                            </a>
+                            <a href="tel:+256702370441" className="chat-option call">
+                                <i className="fas fa-phone-alt"></i>
+                                <span>Call Us</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             <div className={`toast ${toast ? 'show' : ''}`}>{toast}</div>
         </div>
     );
