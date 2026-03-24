@@ -1,9 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { products, categories, banners } from './data';
+import { products as localProducts, categories as localCategories, banners as localBanners } from './data';
+import { supabase } from './supabaseClient';
+import AdminPanel from './AdminPanel';
 import './index.css';
 
 const App = () => {
-    const [activeNav, setActiveNav] = useState('home'); // home, categories, wishlist, account, categoryDetails
+    const [products, setProducts] = useState(localProducts);
+    const [categories, setCategories] = useState(localCategories);
+    const [banners, setBanners] = useState(localBanners);
+    const [user, setUser] = useState(null);
+    const [loginEmail, setLoginEmail] = useState('');
+    const [loginPassword, setLoginPassword] = useState('');
+    const [isLoginLoading, setIsLoginLoading] = useState(false);
+
+    const [activeNav, setActiveNav] = useState('home'); // home, categories, wishlist, account, categoryDetails, admin
     const [activeCategory, setActiveCategory] = useState('all');
     const [cart, setCart] = useState([]);
     const [wishlist, setWishlist] = useState(new Set());
@@ -26,13 +36,40 @@ const App = () => {
 
     const trendingProducts = products.slice(0, 6);
 
+    // Data fetching & Auth state
+    useEffect(() => {
+        const fetchRemoteData = async () => {
+            const [pRes, cRes, bRes] = await Promise.all([
+                supabase.from('products').select('*'),
+                supabase.from('categories').select('*'),
+                supabase.from('banners').select('*')
+            ]);
+            
+            if (pRes.data && pRes.data.length > 0) setProducts(pRes.data);
+            if (cRes.data && cRes.data.length > 0) setCategories(cRes.data);
+            if (bRes.data && bRes.data.length > 0) setBanners(bRes.data);
+        };
+        fetchRemoteData();
+
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            setUser(session?.user ?? null);
+        });
+
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+            setUser(session?.user ?? null);
+        });
+
+        return () => subscription.unsubscribe();
+    }, []);
+
     // Auto-play banner
     useEffect(() => {
+        if (banners.length === 0) return;
         const interval = setInterval(() => {
             setCurrentBanner(prev => (prev + 1) % banners.length);
         }, 5000);
         return () => clearInterval(interval);
-    }, []);
+    }, [banners]);
 
     // Scroll listener
     useEffect(() => {
@@ -313,21 +350,72 @@ const App = () => {
                         <div className="section-header" style={{ marginBottom: '30px' }}>
                             <h2 className="section-title">Profile</h2>
                         </div>
-                        <div className="account-profile" style={{ background: '#fff', padding: '25px', borderRadius: '30px', display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '25px', boxShadow: '0 8px 30px rgba(0,0,0,0.05)' }}>
-                            <div style={{ width: '70px', height: '70px', borderRadius: '50%', background: 'linear-gradient(135deg, #ff6b6b, #ff8e53)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '28px', fontWeight: '800', boxShadow: '0 4px 15px rgba(255, 107, 107, 0.3)' }}>S</div>
-                            <div>
-                                <h3 style={{ fontSize: '18px', fontWeight: '800' }}>Shalom Premium Member</h3>
-                                <p style={{ color: '#888', fontSize: '14px' }}>Member since March 2026</p>
+                        {!user ? (
+                            <div style={{ background: '#fff', padding: '25px', borderRadius: '20px', boxShadow: '0 8px 30px rgba(0,0,0,0.05)' }}>
+                                <h3 style={{ marginBottom: '20px', fontSize: '18px', fontWeight: 'bold' }}>Login to Your Account</h3>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                                    <input type="email" placeholder="Email" value={loginEmail} onChange={e => setLoginEmail(e.target.value)} style={{ padding: '12px', borderRadius: '8px', border: '1px solid #ddd' }} />
+                                    <input type="password" placeholder="Password" value={loginPassword} onChange={e => setLoginPassword(e.target.value)} style={{ padding: '12px', borderRadius: '8px', border: '1px solid #ddd' }} />
+                                    <button 
+                                        onClick={async () => {
+                                            if (!loginEmail || !loginPassword) {
+                                                showToast('Please fill in both email and password');
+                                                return;
+                                            }
+                                            setIsLoginLoading(true);
+                                            const { error } = await supabase.auth.signInWithPassword({ email: loginEmail, password: loginPassword });
+                                            if (error) {
+                                                // Handle potential missing user implicitly by signing up if login fails
+                                                const { error: signUpError } = await supabase.auth.signUp({ email: loginEmail, password: loginPassword });
+                                                if (signUpError) {
+                                                    showToast(signUpError.message);
+                                                } else {
+                                                    showToast('Signup successful! Please log in directly now.');
+                                                }
+                                            } else {
+                                                showToast('Logged in successfully!');
+                                            }
+                                            setIsLoginLoading(false);
+                                        }}
+                                        style={{ padding: '12px', background: '#ff6b6b', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}
+                                    >
+                                        {isLoginLoading ? 'Processing...' : 'Login / Sign Up'}
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                            <div className="account-menu-item"><div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}><i className="fas fa-box"></i><span>My Orders</span></div><i className="fas fa-chevron-right"></i></div>
-                            <div className="account-menu-item" onClick={() => setActiveNav('wishlist')}><div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}><i className="fas fa-heart"></i><span>Wishlist</span></div><i className="fas fa-chevron-right"></i></div>
-                            <div className="account-menu-item"><div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}><i className="fas fa-map-marker-alt"></i><span>Addresses</span></div><i className="fas fa-chevron-right"></i></div>
-                            <div className="account-menu-item"><div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}><i className="fas fa-wallet"></i><span>Payment</span></div><i className="fas fa-chevron-right"></i></div>
-                            <div className="account-menu-item" style={{ marginTop: '20px', background: '#fff0f0' }}><div style={{ display: 'flex', alignItems: 'center', gap: '15px', color: '#ff6b6b' }}><i className="fas fa-sign-out-alt"></i><span>Log Out</span></div></div>
-                        </div>
+                        ) : (
+                            <>
+                                <div className="account-profile" style={{ background: '#fff', padding: '25px', borderRadius: '30px', display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '25px', boxShadow: '0 8px 30px rgba(0,0,0,0.05)' }}>
+                                    <div style={{ width: '70px', height: '70px', borderRadius: '50%', background: 'linear-gradient(135deg, #ff6b6b, #ff8e53)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '28px', fontWeight: '800', boxShadow: '0 4px 15px rgba(255, 107, 107, 0.3)' }}>
+                                        {user.email[0].toUpperCase()}
+                                    </div>
+                                    <div style={{ overflow: 'hidden' }}>
+                                        <h3 style={{ fontSize: '18px', fontWeight: '800', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>{user.email}</h3>
+                                        <p style={{ color: '#888', fontSize: '14px' }}>Member</p>
+                                    </div>
+                                </div>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                    <div className="account-menu-item"><div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}><i className="fas fa-box"></i><span>My Orders</span></div><i className="fas fa-chevron-right"></i></div>
+                                    <div className="account-menu-item" onClick={() => setActiveNav('wishlist')}><div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}><i className="fas fa-heart"></i><span>Wishlist</span></div><i className="fas fa-chevron-right"></i></div>
+                                    
+                                    {user.email === 'israelezrakisakye@gmail.com' && (
+                                        <div className="account-menu-item" onClick={() => setActiveNav('admin')} style={{ background: '#fff5e6', border: '1px solid #ffca28', cursor: 'pointer' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '15px', color: '#f57f17' }}>
+                                                <i className="fas fa-cog"></i><span style={{ fontWeight: 'bold' }}>Admin Dashboard</span>
+                                            </div>
+                                            <i className="fas fa-chevron-right" style={{ color: '#f57f17' }}></i>
+                                        </div>
+                                    )}
+
+                                    <div className="account-menu-item" onClick={async () => { await supabase.auth.signOut(); showToast('Logged out'); }} style={{ marginTop: '20px', background: '#fff0f0', cursor: 'pointer' }}><div style={{ display: 'flex', alignItems: 'center', gap: '15px', color: '#ff6b6b' }}><i className="fas fa-sign-out-alt"></i><span>Log Out</span></div></div>
+                                </div>
+                            </>
+                        )}
                     </section>
+                )}
+                
+                {activeNav === 'admin' && user?.email === 'israelezrakisakye@gmail.com' && (
+                    <AdminPanel onBack={() => setActiveNav('account')} />
                 )}
             </main>
 
