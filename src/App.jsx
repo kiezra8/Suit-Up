@@ -221,7 +221,7 @@ const App = () => {
                 </div>
             </header>
 
-            <main style={{ minHeight: '100vh', padding: '10px 15px' }}>
+            <main className="main-content">
                 {activeNav === 'home' && (
                     <>
                         <section className="banners-container">
